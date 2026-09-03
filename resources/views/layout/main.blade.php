@@ -22,7 +22,7 @@
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
                     @auth
-                        <li><a>Link</a></li>
+                        <li><a>Reservations</a></li>
                         <li>
                             <details>
                                 <summary>Profile</summary>
@@ -47,7 +47,7 @@
         </nav>
     </header>
     <div
-        class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
+        class="flex flex-col items-center justify-center w-full p-2 transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
         @yield('content')
     </div>
 </body>

@@ -9,5 +9,5 @@
 }
 
 @plugin "daisyui" {
-    themes: coffee --default;
+    themes: business --default;
 }

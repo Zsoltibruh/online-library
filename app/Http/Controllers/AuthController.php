@@ -29,8 +29,8 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'email' => 'Invalid email, please try again'
-            ])->onlyInput('email');
+                'credentials' => 'Invalid email or password'
+            ]);
         }
 
         $request->session()->regenerate();
@@ -42,7 +42,7 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'unique:App\Models\User,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
