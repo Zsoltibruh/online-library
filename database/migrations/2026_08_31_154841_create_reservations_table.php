@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('book_id');
             $table->foreignId('user_id');
             $table->timestamp('date');
-            $table->timestamp('return_date');
-            $table->timestamp('actual_return_date');
+            $table->timestamp('return_date')->nullable();
+            $table->timestamp('actual_return_date')->nullable();
 
             $table->unique(['book_id', 'user_id']);
         });

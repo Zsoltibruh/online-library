@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,3 +21,7 @@ Route::controller(AuthController::class)
         Route::post('/logout', 'logout')->name('logout')
             ->middleware('auth');
     });
+
+Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::resource('books', BookController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::resource('authors', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);

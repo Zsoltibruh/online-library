@@ -3,56 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
-    }
+        $books = Book::orderBy('title')->paginate(15);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('books.index', [
+            'books' => $books,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
-    }
+        $request->validate([
+            'title' => ['string', 'required'],
+            'publication_year' => ['string', 'min_digits:4', 'required'],
+            'count' => ['numeric', 'max:99', 'required']
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Book $book)
-    {
-        //
-    }
+        Book::create($request->all());
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Book $book)
-    {
-        //
+        return redirect()->route('books.index');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, Book $book): RedirectResponse
     {
-        //
+        $request->validate([
+            'title' => ['string', 'required'],
+            'publication_year' => ['string', 'min_digits:4', 'required'],
+            'count' => ['numeric', 'max:99', 'required']
+        ]);
+
+        $book->update($request->all());
+
+        return redirect()->route('books.index');
     }
 
     /**
@@ -60,6 +58,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return redirect()->route('books.index');
     }
 }

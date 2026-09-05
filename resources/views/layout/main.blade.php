@@ -23,6 +23,11 @@
                 <ul class="menu menu-horizontal px-1">
                     @auth
                         <li><a>Reservations</a></li>
+                        @can('viewAny', App\Models\User::class)
+                            <li><a href="{{ route('authors.index') }}">Manage authors</a></li>
+                            <li><a href="{{ route('books.index') }}">Manage books</a></li>
+                            <li><a href="{{ route('users.index') }}">Members</a></li>
+                        @endcan
                         <li>
                             <details>
                                 <summary>Profile</summary>
@@ -39,8 +44,8 @@
                     @endauth
 
                     @guest
-                        <li><a href="{{ route('auth.login') }}">Login</a></li>
-                        <li><a href="{{ route('auth.register') }}">Register</a></li>
+                        <li><a href="{{ route('auth.show_login') }}">Login</a></li>
+                        <li><a href="{{ route('auth.show_register') }}">Register</a></li>
                     @endguest
                 </ul>
             </div>
