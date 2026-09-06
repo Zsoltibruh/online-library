@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BookController extends Controller
@@ -14,10 +16,14 @@ class BookController extends Controller
      */
     public function index(): View
     {
-        $books = Book::orderBy('title')->paginate(15);
+        $books = Book::orderBy('title')
+            ->with('authors:id,name')
+            ->paginate(15);
+        $authors = Author::orderBy('name')->get(['id', 'name']);
 
         return view('books.index', [
             'books' => $books,
+            'authors' => $authors,
         ]);
     }
 
@@ -29,10 +35,15 @@ class BookController extends Controller
         $request->validate([
             'title' => ['string', 'required'],
             'publication_year' => ['string', 'min_digits:4', 'required'],
-            'count' => ['numeric', 'max:99', 'required']
+            'count' => ['numeric', 'max:99', 'required'],
+            'author_ids' => ['array', 'min:1', 'required'],
+            'author_ids.*' => ['exists:authors,id'],
         ]);
 
-        Book::create($request->all());
+        DB::transaction(function () use ($request) {
+            $book = Book::create($request->all());
+            $book->authors()->attach($request['author_ids']);
+        });
 
         return redirect()->route('books.index');
     }
@@ -48,7 +59,10 @@ class BookController extends Controller
             'count' => ['numeric', 'max:99', 'required']
         ]);
 
-        $book->update($request->all());
+        DB::transaction(function () use ($request, $book) {
+            $book->update($request->all());
+            $book->authors()->sync($request['author_ids']);
+        });
 
         return redirect()->route('books.index');
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,6 +16,7 @@ class BookSeeder extends Seeder
     {
         Book::factory()
             ->count(40)
+            ->has(Author::factory()->count(1))
             ->create();
     }
 }
