@@ -20,8 +20,9 @@
                         <td>{{ $book->publication_year }}</td>
                         <td>{{ $book->count }}</td>
                         <td class="flex gap-2">
-                            <a href=""
-                                class="btn btn-secondary @if ($book->count === 0) btn-disabled @endif">Reserve</a>
+                            <button type="submit"
+                                class="btn btn-secondary @if ($book->count === 0) btn-disabled @endif"
+                                onclick="reserveBook{{ $book->id }}.showModal()">Reserve</button>
                             <button type="submit" class="btn btn-soft"
                                 onclick="showBook{{ $book->id }}.showModal()">View</button>
                             <button class="btn btn-info" onclick="editBook{{ $book->id }}.showModal()">Edit</button>
@@ -33,8 +34,8 @@
                         </td>
                     </tr>
 
+                    <x-modals.book_reserve :book="$book" :users="$users" />
                     <x-modals.book_show :book="$book" />
-
                     <x-modals.book_edit :book="$book" :authors="$authors" />
                 @endforeach
             </tbody>

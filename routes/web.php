@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,4 @@ Route::controller(AuthController::class)
 Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('books', BookController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('authors', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::resource('reservations', ReservationController::class)->only(['index', 'store', 'update', 'destroy']);

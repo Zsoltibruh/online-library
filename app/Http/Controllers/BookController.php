@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,10 +21,12 @@ class BookController extends Controller
             ->with('authors:id,name')
             ->paginate(15);
         $authors = Author::orderBy('name')->get(['id', 'name']);
+        $users = User::orderBy('name')->get(['id', 'name']);
 
         return view('books.index', [
             'books' => $books,
             'authors' => $authors,
+            'users' => $users,
         ]);
     }
 

@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ReservationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $reservations = Reservation::orderBy('return_date')
+            ->with(['user:id,name', 'book:id,title'])
+            ->paginate(15);
+
+        return view('reservations.index', [
+            'reservations' => $reservations
+        ]);
     }
 
     /**

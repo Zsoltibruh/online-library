@@ -22,10 +22,10 @@
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
                     @auth
-                        <li><a>Reservations</a></li>
                         @can('viewAny', App\Models\User::class)
                             <li><a href="{{ route('authors.index') }}">Manage authors</a></li>
                             <li><a href="{{ route('books.index') }}">Manage books</a></li>
+                            <li><a href="{{ route('reservations.index') }}">Manage reservations</a></li>
                             <li><a href="{{ route('users.index') }}">Members</a></li>
                         @endcan
                         <li>
@@ -51,8 +51,7 @@
             </div>
         </nav>
     </header>
-    <div
-        class="flex flex-col items-center justify-center w-full p-2 transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
+    <div class="flex flex-col items-center justify-center w-full p-2 lg:grow">
         @yield('content')
     </div>
 </body>
