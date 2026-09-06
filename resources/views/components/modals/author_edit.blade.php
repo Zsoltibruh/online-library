@@ -6,7 +6,7 @@
             @method('PATCH')
             <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 text-base">
                 <label class="label" for="name">Name</label>
-                <input type="name" class="input" id="name" name="name" placeholder="e.g.: Sir Arthur Camelot"
+                <input type="text" class="input" id="name" name="name" placeholder="e.g.: Sir Arthur Camelot"
                     value="{{ old('name', $author->name) }}" required />
 
                 <label class="label" for="birth">Birth date</label>
