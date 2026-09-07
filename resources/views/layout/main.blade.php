@@ -15,7 +15,7 @@
 
 <body>
     <header>
-        <nav class="navbar bg-base-100 shadow-sm">
+        <nav class="navbar bg-base-200 shadow-sm">
             <div class="flex-1">
                 <a href="{{ route('welcome') }}" class="btn btn-ghost text-xl">Online library</a>
             </div>
@@ -29,7 +29,7 @@
                             <li><a href="{{ route('users.index') }}">Members</a></li>
                         @endcan
                         <li>
-                            <details>
+                            <details class="z-50">
                                 <summary>Profile</summary>
                                 <ul class="bg-base-100 rounded-t-none p-2">
                                     <li><a> {{ auth()->user()->name }} </a></li>
