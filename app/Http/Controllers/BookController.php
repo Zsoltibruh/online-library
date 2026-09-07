@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\User;
@@ -33,19 +34,13 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(BookRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => ['string', 'required'],
-            'publication_year' => ['string', 'min_digits:4', 'required'],
-            'count' => ['numeric', 'max:99', 'required'],
-            'author_ids' => ['array', 'min:1', 'required'],
-            'author_ids.*' => ['exists:authors,id'],
-        ]);
+        $validated = $request->validated();
 
-        DB::transaction(function () use ($request) {
-            $book = Book::create($request->all());
-            $book->authors()->attach($request['author_ids']);
+        DB::transaction(function () use ($validated) {
+            $book = Book::create($validated);
+            $book->authors()->attach($validated['author_ids']);
         });
 
         return redirect()->route('books.index');
@@ -54,17 +49,13 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book): RedirectResponse
+    public function update(BookRequest $request, Book $book): RedirectResponse
     {
-        $request->validate([
-            'title' => ['string', 'required'],
-            'publication_year' => ['string', 'min_digits:4', 'required'],
-            'count' => ['numeric', 'max:99', 'required']
-        ]);
+        $validated = $request->validated();
 
-        DB::transaction(function () use ($request, $book) {
-            $book->update($request->all());
-            $book->authors()->sync($request['author_ids']);
+        DB::transaction(function () use ($validated, $book) {
+            $book->update($validated);
+            $book->authors()->sync($validated['author_ids']);
         });
 
         return redirect()->route('books.index');

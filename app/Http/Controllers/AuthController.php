@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginAuthRequest;
+use App\Http\Requests\RegisterAuthRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,12 +22,9 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function login(Request $request): RedirectResponse
+    public function login(LoginAuthRequest $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
+        $credentials = $request->validated();
 
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
@@ -38,13 +37,9 @@ class AuthController extends Controller
         return redirect()->intended();
     }
 
-    public function register(Request $request): RedirectResponse
+    public function register(RegisterAuthRequest $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:App\Models\User,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $credentials = $request->validated();
 
         User::create($credentials);
 

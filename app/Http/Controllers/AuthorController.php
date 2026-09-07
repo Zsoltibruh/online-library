@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthorRequest;
 use App\Models\Author;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,14 +25,11 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(AuthorRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['string', 'required'],
-            'birth' => ['date', 'required'],
-        ]);
+        $validated = $request->validated();
 
-        Author::create($request->all());
+        Author::create($validated);
 
         return redirect()->route('authors.index');
     }
@@ -39,14 +37,11 @@ class AuthorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Author $author): RedirectResponse
+    public function update(AuthorRequest $request, Author $author): RedirectResponse
     {
-        $request->validate([
-            'name' => ['string', 'required'],
-            'birth' => ['date', 'required'],
-        ]);
+        $validated = $request->validated();
 
-        $author->update($request->all());
+        $author->update($validated);
 
         return redirect()->route('authors.index');
     }
