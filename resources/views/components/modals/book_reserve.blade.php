@@ -3,9 +3,10 @@
         <h3 class="text-lg font-bold">Reserve {{ $book->title }}</h3>
         <form action="{{ route('reservations.store') }}" method="post">
             @csrf
+            <input type="hidden" name="book_id" value="{{ $book->id }}">
             <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 text-base">
                 <label class="label" for="users">Members</label>
-                <select class="select h-auto" id="users" name="user" required>
+                <select class="select h-auto" id="users" name="user_id" required>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}">
                             {{ $user->name }}
@@ -13,7 +14,7 @@
                     @endforeach
                 </select>
 
-                <button type="submit" class="btn btn-primary">Add book</button>
+                <button type="submit" class="btn btn-primary">Reserve book</button>
             </fieldset>
         </form>
         <div class="modal-action">

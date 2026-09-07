@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReservationRequest;
+use App\Models\Book;
 use App\Models\Reservation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ReservationController extends Controller
@@ -25,9 +29,28 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReservationRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        $book = Book::find($validated['book_id']);
+
+        if ($book->count === 0) {
+            return redirect()->route('books.index');
+        }
+
+        DB::transaction(function () use ($book, $validated) {
+            $book->count = $book->count - 1;
+            $book->save();
+            Reservation::create([
+                'book_id' => $validated['book_id'],
+                'user_id' => $validated['user_id'],
+                'date' => now(),
+                'return_date' => now()->addMonths(2),
+            ]);
+        });
+
+        return redirect()->route('reservations.index');
     }
 
     /**
