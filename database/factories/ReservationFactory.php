@@ -19,8 +19,8 @@ class ReservationFactory extends Factory
      */
     public function definition(): array
     {
-        $reservedAt = fake()->dateTimeBetween('-2 months', 'now');
-        $dueAt = (clone $reservedAt)->modify('+' . fake()->numberBetween(7, 21) . ' days');
+        $reservedAt = fake()->dateTimeBetween('-4 months', 'now');
+        $dueAt = (clone $reservedAt)->modify('+ 2 month');
 
         return [
             'book_id' => Book::factory(),
