@@ -7,6 +7,7 @@
                 <th>Reserved date</th>
                 <th>Due date</th>
                 <th>Return date</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -15,16 +16,21 @@
                 <tr class="hover:bg-base-300">
                     <td>{{ $reservation->book->title }}</td>
                     <td>{{ $reservation->user->name }}</td>
-                    <td>{{ $reservation->date }}</td>
-                    <td>{{ $reservation->return_date }}</td>
-                    <td class="@if (!$reservation->returnedOnTime()) text-error @endif">
-                        {{ $reservation->actual_return_date ?? '-' }}</td>
-                    <td>
+                    <td>{{ $reservation->reservation_date }}</td>
+                    <td>{{ $reservation->due_date }}</td>
+                    <td>{{ $reservation->return_date ?? '-' }}</td>
+                    <td><x-display.status_badge :status="$reservation->status" /></td>
+                    <td class="flex gap-2">
                         <form action="" method="post">
                             <button type="submit"
                                 class="btn btn-warning
-                                @if (!$reservation->isExpired()) btn-disabled @endif">Send
+                                @if (!$reservation->canSendReturnNotice()) btn-disabled @endif">Send
                                 return notice</button>
+                        </form>
+                        <form action="" method="post">
+                            <button type="submit"
+                                class="btn btn-info
+                                @if (!$reservation->canReturn()) btn-disabled @endif">Return</button>
                         </form>
                     </td>
                 </tr>

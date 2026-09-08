@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ReservationStatus;
 use App\Models\Book;
 use App\Models\Reservation;
 use App\Models\User;
@@ -21,15 +22,24 @@ class ReservationFactory extends Factory
     {
         $reservedAt = fake()->dateTimeBetween('-4 months', 'now');
         $dueAt = (clone $reservedAt)->modify('+ 2 month');
+        $returnedAt = fake()->boolean(70)
+            ? fake()->dateTimeBetween($reservedAt, 'now')
+            : null;
+
+        $status = match (true) {
+            $returnedAt === null && $dueAt < now() => ReservationStatus::Overdue,
+            $returnedAt === null => ReservationStatus::Reserved,
+            $returnedAt > $dueAt => ReservationStatus::ReturnedLate,
+            default => ReservationStatus::Returned,
+        };
 
         return [
             'book_id' => Book::factory(),
             'user_id' => User::factory(),
-            'date' => $reservedAt,
-            'return_date' => $dueAt,
-            'actual_return_date' => fake()->boolean(70)
-                ? fake()->dateTimeBetween($reservedAt, 'now')
-                : null,
+            'reservation_date' => $reservedAt,
+            'due_date' => $dueAt,
+            'return_date' => $returnedAt,
+            'status' => $status,
         ];
     }
 }

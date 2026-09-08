@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ReservationStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -12,7 +13,7 @@ use Override;
 
 #[Table(timestamps: false)]
 #[Hidden(['id'])]
-#[Fillable(['book_id', 'user_id', 'date', 'return_date'])]
+#[Fillable(['book_id', 'user_id', 'date', 'due_date'])]
 class Reservation extends Model
 {
     use HasFactory;
@@ -26,9 +27,10 @@ class Reservation extends Model
     protected function casts(): array
     {
         return [
-            'date' => 'datetime',
+            'reservation_date' => 'datetime',
+            'due_date' => 'datetime',
             'return_date' => 'datetime',
-            'actual_return_date' => 'datetime',
+            'status' => ReservationStatus::class,
         ];
     }
 
@@ -36,18 +38,23 @@ class Reservation extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function returnedOnTime(): bool
+    public function canSendReturnNotice(): bool
     {
-        if ($this->actual_return_date === null) {
-            return true;
-        }
+        return $this->status === ReservationStatus::Overdue;
+    }
 
-        return $this->return_date->diffInMonths($this->actual_return_date) < 0;
+    public function canReturn(): bool
+    {
+        return $this->return_date === null;
+    }
+
+    public function returnedLate(): bool
+    {
+        return $this->due_date->diffInMonths($this->return_date) > 0;
     }
 
     public function isExpired(): bool
     {
-        return $this->return_date->isPast() && $this->actual_return_date === null;
+        return $this->due_date->isPast() && $this->return_date === null;
     }
 }

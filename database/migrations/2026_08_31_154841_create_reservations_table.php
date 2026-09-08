@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('book_id');
             $table->foreignId('user_id');
-            $table->timestampTz('date');
-            $table->timestampTz('return_date');
-            $table->timestampTz('actual_return_date')->nullable();
+            $table->timestampTz('reservation_date');
+            $table->timestampTz('due_date');
+            $table->timestampTz('return_date')->nullable();
+            $table->string('status');
 
             $table->unique(['book_id', 'user_id']);
         });
