@@ -6,9 +6,8 @@ use App\Enums\ReservationStatus;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Book;
 use App\Models\Reservation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ReservationController extends Controller
@@ -34,23 +33,21 @@ class ReservationController extends Controller
     {
         $validated = $request->validated();
 
-        $book = Book::find($validated['book_id']);
+        $book = Book::withCount(['reservations' => function (Builder $query) {
+            $query->where('status', '=', ReservationStatus::Reserved->value);
+        }])->find($validated['book_id']);
 
-        if ($book->count === 0) {
+        if ($book->reservations_count === $book->count) {
             return redirect()->route('books.index');
         }
 
-        DB::transaction(function () use ($book, $validated) {
-            $book->count = $book->count - 1;
-            $book->save();
-            Reservation::create([
-                'book_id' => $validated['book_id'],
-                'user_id' => $validated['user_id'],
-                'reservation_date' => now(),
-                'due_date' => now()->addMonths(2),
-                'status' => ReservationStatus::Reserved,
-            ]);
-        });
+        Reservation::create([
+            'book_id' => $validated['book_id'],
+            'user_id' => $validated['user_id'],
+            'reservation_date' => now(),
+            'due_date' => now()->addMonths(2),
+            'status' => ReservationStatus::Reserved,
+        ]);
 
         return redirect()->route('reservations.index');
     }
@@ -58,17 +55,11 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation)
+    public function update(Reservation $reservation)
     {
-        $book = Book::find($reservation->book_id);
-
-        DB::transaction(function () use ($book, $reservation) {
-            $book->count = $book->count + 1;
-            $reservation->return_date = now();
-            $reservation->status = ReservationStatus::Returned;
-            $book->save();
-            $reservation->save();
-        });
+        $reservation->return_date = now();
+        $reservation->status = ReservationStatus::Returned;
+        $reservation->save();
 
         return redirect()->route('reservations.index');
     }

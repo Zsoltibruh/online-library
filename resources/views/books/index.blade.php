@@ -16,8 +16,7 @@
                     <tr class="hover:bg-base-300">
                         <td>{{ $book->title }}</td>
                         <td class="flex gap-2">
-                            <button type="submit"
-                                class="btn btn-secondary @if ($book->count === 0) btn-disabled @endif"
+                            <button type="submit" class="btn btn-secondary"
                                 onclick="reserveBook{{ $book->id }}.showModal()">Reserve</button>
                             <button type="submit" class="btn btn-soft"
                                 onclick="showBook{{ $book->id }}.showModal()">View</button>
