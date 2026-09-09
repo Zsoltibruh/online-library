@@ -8,8 +8,6 @@
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Publication year</th>
-                    <th>In storage</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -17,8 +15,6 @@
                 @foreach ($books as $book)
                     <tr class="hover:bg-base-300">
                         <td>{{ $book->title }}</td>
-                        <td>{{ $book->publication_year }}</td>
-                        <td>{{ $book->count }}</td>
                         <td class="flex gap-2">
                             <button type="submit"
                                 class="btn btn-secondary @if ($book->count === 0) btn-disabled @endif"

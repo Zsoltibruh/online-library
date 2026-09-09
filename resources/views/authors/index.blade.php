@@ -8,7 +8,6 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Birth date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -16,8 +15,9 @@
                 @foreach ($authors as $author)
                     <tr class="hover:bg-base-300">
                         <td>{{ $author->name }}</td>
-                        <td>{{ $author->birth }}</td>
                         <td class="flex gap-2">
+                            <button type="submit" class="btn btn-neutral"
+                                onclick="showAuthor{{ $author->id }}.showModal()">View</button>
                             <button class="btn btn-info" onclick="editAuthor{{ $author->id }}.showModal()">Edit</button>
                             <form action="{{ route('authors.destroy', $author) }}" method="POST">
                                 @csrf
@@ -28,6 +28,7 @@
                     </tr>
 
                     <x-modals.author_edit :author="$author" />
+                    <x-modals.author_show :author="$author" />
                 @endforeach
             </tbody>
         </table>
