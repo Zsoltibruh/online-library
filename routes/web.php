@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AccessChecker;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,7 +24,9 @@ Route::controller(AuthController::class)
             ->middleware('auth');
     });
 
-Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('books', BookController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('authors', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('reservations', ReservationController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::middleware(['auth', AccessChecker::class])->group(function () {
+    Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('books', BookController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('authors', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('reservations', ReservationController::class)->only(['index', 'store', 'update', 'destroy']);
+});
