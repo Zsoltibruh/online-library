@@ -18,14 +18,4 @@ enum ReservationStatus: string
             default => 'Reserved',
         };
     }
-
-    public function textColor(): string
-    {
-        return match ($this) {
-            self::Returned => 'text-success',
-            self::ReturnedLate => 'text-warning',
-            self::Overdue => 'text-error',
-            default => 'text-info',
-        };
-    }
 }
