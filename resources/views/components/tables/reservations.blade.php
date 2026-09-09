@@ -19,7 +19,7 @@
                     <td>{{ $reservation->due_date }}</td>
                     <td><x-display.status_badge :status="$reservation->status" /></td>
                     <td class="flex gap-2">
-                        <form action="{{ route('reservations.update', $reservation) }}" method="post">
+                        <form action="{{ route('reservations.return', $reservation) }}" method="post">
                             @csrf
                             @method('PATCH')
                             <button type="submit"

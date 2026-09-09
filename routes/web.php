@@ -28,5 +28,13 @@ Route::middleware(['auth', AccessChecker::class])->group(function () {
     Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('books', BookController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('authors', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
-    Route::resource('reservations', ReservationController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::controller(ReservationController::class)
+        ->name('reservations.')
+        ->group(function () {
+            Route::get('/reservations', 'index')->name('index');
+            Route::post('/reservations', 'store')->name('store');
+            Route::patch('/reservations/{reservation}/return', 'return')->name('return');
+            Route::patch('/reservations/{reservation}/mark-as-lost', 'markAsLost')->name('mark_as_lost');
+        });
+    // Route::resource('reservations', ReservationController::class)->only(['index', 'store', 'update', 'destroy']);
 });

@@ -55,20 +55,19 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Reservation $reservation)
+    public function return(Reservation $reservation): RedirectResponse
     {
+        $status = $reservation->due_date < now()
+            ? ReservationStatus::ReturnedLate : ReservationStatus::Returned;
+
         $reservation->return_date = now();
-        $reservation->status = ReservationStatus::Returned;
+        $reservation->status = $status;
         $reservation->save();
 
         return redirect()->route('reservations.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Reservation $reservation)
-    {
-        //
-    }
+    // public function markAsLost(): RedirectResponse {
+
+    // }
 }
