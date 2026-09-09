@@ -34,7 +34,7 @@ class ReservationController extends Controller
         $validated = $request->validated();
 
         $book = Book::withCount(['reservations' => function (Builder $query) {
-            $query->where('status', '=', ReservationStatus::Reserved->value);
+            $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Overdue->value]);
         }])->find($validated['book_id']);
 
         if ($book->reservations_count === $book->count) {
