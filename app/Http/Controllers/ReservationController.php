@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReservationStatus;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Book;
 use App\Models\Reservation;
@@ -17,7 +18,7 @@ class ReservationController extends Controller
      */
     public function index(): View
     {
-        $reservations = Reservation::orderBy('return_date')
+        $reservations = Reservation::orderBy('reservation_date')
             ->with(['user:id,name', 'book:id,title'])
             ->paginate(15);
 
@@ -45,8 +46,9 @@ class ReservationController extends Controller
             Reservation::create([
                 'book_id' => $validated['book_id'],
                 'user_id' => $validated['user_id'],
-                'date' => now(),
-                'return_date' => now()->addMonths(2),
+                'reservation_date' => now(),
+                'due_date' => now()->addMonths(2),
+                'status' => ReservationStatus::Reserved,
             ]);
         });
 
@@ -58,7 +60,17 @@ class ReservationController extends Controller
      */
     public function update(Request $request, Reservation $reservation)
     {
-        //
+        $book = Book::find($reservation->book_id);
+
+        DB::transaction(function () use ($book, $reservation) {
+            $book->count = $book->count + 1;
+            $reservation->return_date = now();
+            $reservation->status = ReservationStatus::Returned;
+            $book->save();
+            $reservation->save();
+        });
+
+        return redirect()->route('reservations.index');
     }
 
     /**

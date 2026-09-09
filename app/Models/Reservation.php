@@ -13,7 +13,7 @@ use Override;
 
 #[Table(timestamps: false)]
 #[Hidden(['id'])]
-#[Fillable(['book_id', 'user_id', 'date', 'due_date'])]
+#[Fillable(['book_id', 'user_id', 'reservation_date', 'due_date', 'status'])]
 class Reservation extends Model
 {
     use HasFactory;

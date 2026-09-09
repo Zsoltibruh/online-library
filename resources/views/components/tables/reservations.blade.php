@@ -6,7 +6,6 @@
                 <th>Member</th>
                 <th>Reserved date</th>
                 <th>Due date</th>
-                <th>Return date</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -18,19 +17,18 @@
                     <td>{{ $reservation->user->name }}</td>
                     <td>{{ $reservation->reservation_date }}</td>
                     <td>{{ $reservation->due_date }}</td>
-                    <td>{{ $reservation->return_date ?? '-' }}</td>
                     <td><x-display.status_badge :status="$reservation->status" /></td>
                     <td class="flex gap-2">
-                        <form action="" method="post">
-                            <button type="submit"
-                                class="btn btn-warning
-                                @if (!$reservation->canSendReturnNotice()) btn-disabled @endif">Send
-                                return notice</button>
-                        </form>
-                        <form action="" method="post">
+                        <form action="{{ route('reservations.update', $reservation) }}" method="post">
+                            @csrf
+                            @method('PATCH')
                             <button type="submit"
                                 class="btn btn-info
                                 @if (!$reservation->canReturn()) btn-disabled @endif">Return</button>
+                        </form>
+                        <form action="" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-error">Mark as lost</button>
                         </form>
                     </td>
                 </tr>
