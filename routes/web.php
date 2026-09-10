@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\LostBookController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AccessChecker;
@@ -32,9 +33,14 @@ Route::middleware(['auth', AccessChecker::class])->group(function () {
         ->name('reservations.')
         ->group(function () {
             Route::get('/reservations', 'index')->name('index');
+            Route::get('/lost-reservations', 'lost')->name('lost');
             Route::post('/reservations', 'store')->name('store');
             Route::patch('/reservations/{reservation}/return', 'return')->name('return');
-            Route::patch('/reservations/{reservation}/mark-as-lost', 'markAsLost')->name('mark_as_lost');
         });
-    // Route::resource('reservations', ReservationController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::controller(LostBookController::class)
+        ->name('lost_books.')
+        ->group(function () {
+            Route::patch('/lost-reservations/{reservation}/mark-as-lost', 'markAsLost')->name('mark_as_lost');
+            Route::patch('/lost-reservations/{lostBook}/return', 'return')->name('return');
+        });
 });

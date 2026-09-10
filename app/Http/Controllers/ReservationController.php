@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\ReservationStatus;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Book;
+use App\Models\LostBook;
 use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ReservationController extends Controller
@@ -19,10 +21,25 @@ class ReservationController extends Controller
     {
         $reservations = Reservation::orderBy('reservation_date')
             ->with(['user:id,name', 'book:id,title'])
+            ->where('status', '!=', ReservationStatus::Overdue)
             ->paginate(15);
 
         return view('reservations.index', [
             'reservations' => $reservations
+        ]);
+    }
+
+    public function lost(): View
+    {
+        $lostBooks = LostBook::orderBy('log_date')
+            ->with(['reservation' => [
+                'book',
+                'user',
+            ]])
+            ->paginate(15);
+
+        return view('reservations.lost', [
+            'lostBooks' => $lostBooks,
         ]);
     }
 
@@ -37,7 +54,7 @@ class ReservationController extends Controller
             $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Overdue->value]);
         }])->find($validated['book_id']);
 
-        if ($book->reservations_count === $book->count) {
+        if ($book->reservations_count >= $book->count) {
             return redirect()->route('books.index');
         }
 
@@ -57,6 +74,14 @@ class ReservationController extends Controller
      */
     public function return(Reservation $reservation): RedirectResponse
     {
+        if ($reservation->status === ReservationStatus::Overdue) {
+            $reservation->status = ReservationStatus::ReturnedLate;
+            $reservation->return_date = now();
+            $reservation->save();
+
+            return redirect()->route('reservations.index');
+        }
+
         $status = $reservation->due_date < now()
             ? ReservationStatus::ReturnedLate : ReservationStatus::Returned;
 
@@ -66,8 +91,4 @@ class ReservationController extends Controller
 
         return redirect()->route('reservations.index');
     }
-
-    // public function markAsLost(): RedirectResponse {
-
-    // }
 }

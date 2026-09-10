@@ -26,10 +26,14 @@
                                 class="btn btn-info
                                 @if (!$reservation->canReturn()) btn-disabled @endif">Return</button>
                         </form>
-                        <form action="" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-error">Mark as lost</button>
-                        </form>
+                        @if ($reservation->isExpired())
+                            <form action="{{ route('lost_books.mark_as_lost', $reservation) }}" method="post">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-error">Mark as
+                                    lost</button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach

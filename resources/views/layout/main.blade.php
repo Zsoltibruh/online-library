@@ -26,6 +26,7 @@
                             <li><a href="{{ route('authors.index') }}">Manage authors</a></li>
                             <li><a href="{{ route('books.index') }}">Manage books</a></li>
                             <li><a href="{{ route('reservations.index') }}">Manage reservations</a></li>
+                            <li><a href="{{ route('reservations.lost') }}">Lost reservations</a></li>
                             <li><a href="{{ route('users.index') }}">Members</a></li>
                         @endcan
                         <li>

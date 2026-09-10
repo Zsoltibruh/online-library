@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 
 #[Table(timestamps: false)]
 #[Hidden(['id'])]
-#[Fillable(['book_id', 'user_id', 'reservation_date', 'due_date', 'status'])]
+#[Fillable(['book_id', 'user_id', 'reservation_date', 'due_date', 'return_date', 'status'])]
 class Reservation extends Model
 {
     use HasFactory;
@@ -21,6 +22,11 @@ class Reservation extends Model
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
+    }
+
+    public function lostBooks(): HasMany
+    {
+        return $this->hasMany(LostBook::class);
     }
 
     #[Override]
@@ -55,6 +61,8 @@ class Reservation extends Model
 
     public function isExpired(): bool
     {
-        return $this->due_date->isPast() && $this->return_date === null;
+        return $this->return_date === null &&
+            $this->status === ReservationStatus::Reserved
+            && now()->diffInMonths($this->due_date) < 0;
     }
 }
