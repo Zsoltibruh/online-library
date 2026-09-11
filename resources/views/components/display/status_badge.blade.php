@@ -9,7 +9,6 @@
         ReservationStatus::Reserved => 'badge-info',
         ReservationStatus::Returned => 'badge-success',
         ReservationStatus::ReturnedLate => 'badge-warning',
-        ReservationStatus::Overdue => 'badge-error',
         default => 'badge-info',
     };
 @endphp

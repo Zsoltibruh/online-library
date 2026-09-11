@@ -17,7 +17,7 @@ class LostBookController extends Controller
 
         DB::transaction(function () use ($reservation, $book) {
             $book->decrement('count');
-            $reservation->status = ReservationStatus::Overdue;
+            $reservation->status = ReservationStatus::Lost;
 
             LostBook::create([
                 'reservation_id' => $reservation->id,

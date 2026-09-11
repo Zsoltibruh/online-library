@@ -46,7 +46,7 @@ class Reservation extends Model
     }
     public function canSendReturnNotice(): bool
     {
-        return $this->status === ReservationStatus::Overdue;
+        return $this->status === ReservationStatus::Lost;
     }
 
     public function canReturn(): bool

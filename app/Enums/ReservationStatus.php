@@ -7,14 +7,14 @@ enum ReservationStatus: string
     case Reserved = 'reserved';
     case Returned = 'returned';
     case ReturnedLate = 'returned_late';
-    case Overdue = 'overdue';
+    case Lost = 'lost';
 
     public function label(): string
     {
         return match ($this) {
             self::Returned => 'Returned',
             self::ReturnedLate => 'Returned Late',
-            self::Overdue => 'Overdue',
+            self::Lost => 'Lost',
             default => 'Reserved',
         };
     }

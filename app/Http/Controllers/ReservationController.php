@@ -21,7 +21,7 @@ class ReservationController extends Controller
     {
         $reservations = Reservation::orderBy('reservation_date')
             ->with(['user:id,name', 'book:id,title'])
-            ->where('status', '!=', ReservationStatus::Overdue)
+            ->where('status', '!=', ReservationStatus::Lost)
             ->paginate(15);
 
         return view('reservations.index', [
@@ -51,7 +51,7 @@ class ReservationController extends Controller
         $validated = $request->validated();
 
         $book = Book::withCount(['reservations' => function (Builder $query) {
-            $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Overdue->value]);
+            $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Lost->value]);
         }])->find($validated['book_id']);
 
         if ($book->reservations_count >= $book->count) {
@@ -74,7 +74,7 @@ class ReservationController extends Controller
      */
     public function return(Reservation $reservation): RedirectResponse
     {
-        if ($reservation->status === ReservationStatus::Overdue) {
+        if ($reservation->status === ReservationStatus::Lost) {
             $reservation->status = ReservationStatus::ReturnedLate;
             $reservation->return_date = now();
             $reservation->save();

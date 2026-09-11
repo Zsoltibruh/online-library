@@ -27,7 +27,7 @@ class ReservationFactory extends Factory
             : null;
 
         $status = match (true) {
-            $returnedAt === null && $dueAt < now() => ReservationStatus::Overdue,
+            $returnedAt === null && $dueAt < now() => ReservationStatus::Lost,
             $returnedAt === null => ReservationStatus::Reserved,
             $returnedAt > $dueAt => ReservationStatus::ReturnedLate,
             default => ReservationStatus::Returned,
