@@ -20,9 +20,11 @@
                         <td>{{ $user->created_at }}</td>
                         <td>
                             <ul class="list">
-                                <li>Book 1</li>
-                                <li>Book 2</li>
-                                <li>Book 3</li>
+                                @forelse ($user->reservations as $reservation)
+                                    <li>{{ $reservation->book->title }}</li>
+                                @empty
+                                    <li>-</li>
+                                @endforelse
                             </ul>
                         </td>
                     </tr>

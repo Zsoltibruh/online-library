@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReservationStatus;
 use App\Enums\UserRole;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -14,7 +14,10 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $users = User::select(['name', 'email', 'created_at'])
+        $users = User::select(['id', 'name', 'email', 'created_at'])
+            ->with(['reservations' => function ($query) {
+                $query->where('status', '=', ReservationStatus::Reserved);
+            }, 'reservations.book'])
             ->where('role', UserRole::Member)
             ->orderBy('name')
             ->paginate(15);
