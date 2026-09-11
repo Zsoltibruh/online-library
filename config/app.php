@@ -67,6 +67,8 @@ return [
 
     'timezone' => 'Europe/Budapest',
 
+    'schedule_timezone' => 'Europe/Budapest',
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
