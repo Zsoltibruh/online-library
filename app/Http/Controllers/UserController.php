@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         $users = User::select(['id', 'name', 'email', 'created_at'])
             ->with(['reservations' => function ($query) {
-                $query->where('status', '=', ReservationStatus::Reserved);
+                $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Lost->value]);
             }, 'reservations.book'])
             ->where('role', UserRole::Member)
             ->orderBy('name')

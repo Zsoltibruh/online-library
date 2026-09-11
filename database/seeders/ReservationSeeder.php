@@ -16,16 +16,8 @@ class ReservationSeeder extends Seeder
      */
     public function run(): void
     {
-        $books = Book::all();
-        $users = User::where(['role' => UserRole::Member])->get();
-
         Reservation::factory()
             ->count(20)
-            ->make()
-            ->each(function (Reservation $reservation) use ($books, $users) {
-                $reservation->book_id = $books->random()->id;
-                $reservation->user_id = $users->random()->id;
-                $reservation->save();
-            });
+            ->create();
     }
 }

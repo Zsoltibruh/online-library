@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ReservationStatus;
+use App\Enums\UserRole;
 use App\Models\Book;
 use App\Models\Reservation;
 use App\Models\User;
@@ -20,6 +21,8 @@ class ReservationFactory extends Factory
      */
     public function definition(): array
     {
+        $book = Book::inRandomOrder()->first();
+        $user = User::inRandomOrder()->where(['role' => UserRole::Member])->first();
         $reservedAt = fake()->dateTimeBetween('-4 months', 'now');
         $dueAt = (clone $reservedAt)->modify('+ 2 month');
         $returnedAt = fake()->boolean(70)
@@ -27,15 +30,15 @@ class ReservationFactory extends Factory
             : null;
 
         $status = match (true) {
-            $returnedAt === null && $dueAt < now() => ReservationStatus::Lost,
+            $returnedAt === null && $dueAt < now() => ReservationStatus::Reserved,
             $returnedAt === null => ReservationStatus::Reserved,
             $returnedAt > $dueAt => ReservationStatus::ReturnedLate,
             default => ReservationStatus::Returned,
         };
 
         return [
-            'book_id' => Book::factory(),
-            'user_id' => User::factory(),
+            'book_id' => $book,
+            'user_id' => $user,
             'reservation_date' => $reservedAt,
             'due_date' => $dueAt,
             'return_date' => $returnedAt,
