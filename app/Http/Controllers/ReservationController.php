@@ -7,6 +7,7 @@ use App\Http\Requests\ReservationRequest;
 use App\Models\Book;
 use App\Models\LostBook;
 use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,12 @@ class ReservationController extends Controller
         $book = Book::withCount(['reservations' => function (Builder $query) {
             $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Lost->value]);
         }])->find($validated['book_id']);
+
+        $user = User::find($validated['user_id']);
+
+        if ($user->hasLostBook()) {
+            return redirect()->route('books.index');
+        }
 
         if ($book->reservations_count >= $book->count) {
             return redirect()->route('books.index');

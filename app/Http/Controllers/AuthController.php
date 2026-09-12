@@ -34,6 +34,12 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+
+        if ($user->hasLostBook()) {
+            return redirect()->intended()->with('warning', 'You can\' reserve more books until you return your lost book');
+        }
+
         return redirect()->intended();
     }
 

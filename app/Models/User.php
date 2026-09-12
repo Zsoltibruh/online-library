@@ -38,4 +38,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function hasLostBook(): bool
+    {
+        return $this->reservations()->whereHas('lostBooks')->exists();
+    }
 }
