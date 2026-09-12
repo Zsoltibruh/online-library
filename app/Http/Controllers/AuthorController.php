@@ -13,10 +13,18 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = $request->search;
+
         $authors = Author::orderBy('name')
             ->with('books:id,title')
+            ->when($search, function ($query, $search) {
+                $query->whereFullText('name', $search)
+                    ->orWhereHas('books', function ($query) use ($search) {
+                        $query->whereFullText('title', $search);
+                    });
+            })
             ->paginate(15);
 
         return view('authors.index', [

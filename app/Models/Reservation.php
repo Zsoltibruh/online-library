@@ -44,10 +44,6 @@ class Reservation extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function canSendReturnNotice(): bool
-    {
-        return $this->status === ReservationStatus::Lost;
-    }
 
     public function canReturn(): bool
     {

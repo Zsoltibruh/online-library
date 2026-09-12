@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->date('birth');
+
+            $table->fullText('name')->language('english');
         });
     }
 

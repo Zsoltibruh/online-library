@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('publication_year');
             $table->integer('count');
+
+            $table->fullText('title')->language('english');
         });
     }
 

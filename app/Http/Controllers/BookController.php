@@ -16,10 +16,18 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = $request->search;
+
         $books = Book::orderBy('title')
             ->with('authors:id,name')
+            ->when($search, function ($query, $search) {
+                $query->whereFullText('title', $search)
+                    ->orWhereHas('authors', function ($query) use ($search) {
+                        $query->whereFullText('name', $search);
+                    });
+            })
             ->paginate(15);
         $authors = Author::orderBy('name')->get(['id', 'name']);
         $users = User::orderBy('name')->get(['id', 'name']);
