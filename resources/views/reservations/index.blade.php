@@ -14,23 +14,6 @@
                 <td>{{ $reservation->reservation_date }}</td>
                 <td>{{ $reservation->due_date }}</td>
                 <td><x-display.status_badge :status="$reservation->status" /></td>
-                {{-- <td class="flex gap-2">
-                    <form action="{{ route('reservations.return', $reservation) }}" method="post">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit"
-                            class="btn btn-info
-                                @if (!$reservation->canReturn()) btn-disabled @endif">Return</button>
-                    </form>
-                    @if ($reservation->isExpired())
-                        <form action="{{ route('lost_books.mark_as_lost', $reservation) }}" method="post">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="btn btn-error">Mark as
-                                lost</button>
-                        </form>
-                    @endif
-                </td> --}}
             </tr>
         @endforeach
     </x-display.table>
