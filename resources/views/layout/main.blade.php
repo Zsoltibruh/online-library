@@ -25,9 +25,18 @@
                         @can('viewAny', App\Models\User::class)
                             <li><a href="{{ route('authors.index') }}">Manage authors</a></li>
                             <li><a href="{{ route('books.index') }}">Manage books</a></li>
-                            <li><a href="{{ route('reservations.index') }}">Manage reservations</a></li>
-                            <li><a href="{{ route('reservations.lost') }}">Lost reservations</a></li>
                             <li><a href="{{ route('users.index') }}">Members</a></li>
+                            <li>
+                                <details class="z-50">
+                                    <summary>Manage reservations</summary>
+                                    <ul class="bg-base-100 rounded-t-none p-2">
+                                        <li><a href="{{ route('reservations.active') }}">Active reservations</a></li>
+                                        <li><a href="{{ route('reservations.lost') }}">Lost reservations</a></li>
+                                        <li><a href="{{ route('reservations.overdue') }}">Overdue reservations</a></li>
+                                        <li><a href="{{ route('reservations.index') }}">Previous reservations</a></li>
+                                    </ul>
+                                </details>
+                            </li>
                         @endcan
                         <li>
                             <details class="z-50">

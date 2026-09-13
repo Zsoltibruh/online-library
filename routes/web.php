@@ -34,6 +34,8 @@ Route::middleware(['auth', AccessChecker::class])->group(function () {
         ->group(function () {
             Route::get('/reservations', 'index')->name('index');
             Route::get('/lost-reservations', 'lost')->name('lost');
+            Route::get('/active-reservations', 'active')->name('active');
+            Route::get('/overdue-reservations', 'overdue')->name('overdue');
             Route::post('/reservations', 'store')->name('store');
             Route::patch('/reservations/{reservation}/return', 'return')->name('return');
         });

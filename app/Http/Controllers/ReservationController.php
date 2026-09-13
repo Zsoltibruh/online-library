@@ -22,7 +22,7 @@ class ReservationController extends Controller
     {
         $reservations = Reservation::orderBy('reservation_date')
             ->with(['user:id,name', 'book:id,title'])
-            ->where('status', '!=', ReservationStatus::Lost)
+            ->whereNotNull('return_date')
             ->paginate(15);
 
         return view('reservations.index', [
@@ -41,6 +41,33 @@ class ReservationController extends Controller
 
         return view('reservations.lost', [
             'lostBooks' => $lostBooks,
+        ]);
+    }
+
+    public function active(): View
+    {
+        $reservations = Reservation::orderBy('reservation_date')
+            ->with(['user:id,name', 'book:id,title'])
+            ->whereNull('return_date')
+            ->where(['status' => ReservationStatus::Reserved])
+            ->paginate(15);
+
+        return view('reservations.active', [
+            'reservations' => $reservations
+        ]);
+    }
+
+    public function overdue(): View
+    {
+        $reservations = Reservation::orderBy('reservation_date')
+            ->with(['user:id,name', 'book:id,title'])
+            ->whereNull('return_date')
+            ->where('due_date', '<', now())
+            ->where('status', '!=', ReservationStatus::Lost)
+            ->paginate(15);
+
+        return view('reservations.overdue', [
+            'reservations' => $reservations
         ]);
     }
 
