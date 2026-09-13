@@ -15,9 +15,11 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::select(['id', 'name', 'email', 'created_at'])
-            ->with(['reservations' => function ($query) {
-                $query->whereIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Lost->value]);
-            }, 'reservations.book'])
+            ->with([
+                'activeReservations.book:id,title',
+                'overdueReservations.book:id,title',
+                'previousReservations.book:id,title',
+            ])
             ->where('role', UserRole::Member)
             ->orderBy('name')
             ->paginate(15);

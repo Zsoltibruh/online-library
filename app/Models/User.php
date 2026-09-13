@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\ReservationStatus;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -32,6 +33,25 @@ class User extends Authenticatable
             'password' => 'hashed',
             'role' => UserRole::class,
         ];
+    }
+
+    public function activeReservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class)->where(['status' => ReservationStatus::Reserved]);
+    }
+
+    public function overdueReservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class)
+            ->whereNull('return_date')
+            ->where('due_date', '<', now())
+            ->where('status', '!=', ReservationStatus::Lost);
+    }
+
+    public function previousReservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class)
+            ->whereIn('status', [ReservationStatus::Returned, ReservationStatus::ReturnedLate]);
     }
 
     public function reservations(): HasMany
