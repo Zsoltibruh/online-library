@@ -23,7 +23,7 @@
                 <td>{{ $lostBook->reservation->due_date }}</td>
                 <td>{{ $lostBook->logger }}</td>
                 <td>
-                    <form action="{{ route('lost_books.return', $lostBook) }}" method="post">
+                    <form action="{{ route('lost-books.return', $lostBook) }}" method="post">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="btn btn-info

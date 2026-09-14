@@ -22,7 +22,7 @@
                                 @if (!$reservation->canReturn()) btn-disabled @endif">Return</button>
                     </form>
                     @if ($reservation->isExpired())
-                        <form action="{{ route('lost_books.mark_as_lost', $reservation) }}" method="post">
+                        <form action="{{ route('lost-books.mark_as_lost', $reservation) }}" method="post">
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="btn btn-error">Mark as

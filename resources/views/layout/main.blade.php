@@ -22,7 +22,7 @@
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
                     @auth
-                        @can('viewAny', App\Models\User::class)
+                        @can('manage-library')
                             <li><a href="{{ route('authors.index') }}">Manage authors</a></li>
                             <li><a href="{{ route('books.index') }}">Manage books</a></li>
                             <li><a href="{{ route('users.index') }}">Members</a></li>
@@ -38,6 +38,7 @@
                                 </details>
                             </li>
                         @endcan
+                        <li><a href="{{ route('books.list') }}">Books</a></li>
                         <li>
                             <details class="z-50">
                                 <summary>Profile</summary>
@@ -54,8 +55,8 @@
                     @endauth
 
                     @guest
-                        <li><a href="{{ route('auth.show_login') }}">Login</a></li>
-                        <li><a href="{{ route('auth.show_register') }}">Register</a></li>
+                        <li><a href="{{ route('show_login') }}">Login</a></li>
+                        <li><a href="{{ route('show_register') }}">Register</a></li>
                     @endguest
                 </ul>
             </div>

@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-    <form action="{{ route('auth.register') }}" method="post">
+    <form action="{{ route('register') }}" method="post">
         @csrf
         <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 text-lg">
             <legend class="fieldset-legend">Register</legend>

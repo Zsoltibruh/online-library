@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReservationStatus;
 use App\Http\Requests\BookRequest;
 use App\Models\Author;
 use App\Models\Book;
@@ -36,6 +37,28 @@ class BookController extends Controller
             'books' => $books,
             'authors' => $authors,
             'users' => $users,
+        ]);
+    }
+
+    public function list(Request $request): View
+    {
+        $search = $request->search;
+
+
+        $books = Book::orderBy('title')
+            ->with('authors:id,name')
+            ->when($search, function ($query, $search) {
+                $query->whereFullText('title', $search)
+                    ->orWhereHas('authors', function ($query) use ($search) {
+                        $query->whereFullText('name', $search);
+                    });
+            })
+            ->withCount(['reservations' => function ($query) {
+                $query->whereNotIn('status', [ReservationStatus::Reserved->value, ReservationStatus::Lost->value]);
+            }])->paginate(15);
+
+        return view('books.list', [
+            'books' => $books,
         ]);
     }
 

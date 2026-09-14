@@ -16,7 +16,7 @@ class AccessChecker
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->role !== UserRole::Librarian) {
+        if (!auth()->user()->isLibrarian()) {
             return abort(403);
         }
 
