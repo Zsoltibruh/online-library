@@ -2,6 +2,10 @@
 
 @section('content')
     <h1 class="text-2xl">Users</h1>
+    <div class="flex flex-col content-around w-full">
+        <x-forms.search :route="route('users.index')" />
+    </div>
+    <div class="divider"></div>
     <x-display.table :headers="['Name', 'Email', 'Join date', 'Actions']">
         @foreach ($users as $user)
             <tr class="hover:bg-base-300">

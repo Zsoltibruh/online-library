@@ -19,8 +19,6 @@ return new class extends Migration
             $table->timestampTz('due_date');
             $table->timestampTz('return_date')->nullable();
             $table->string('status');
-
-            $table->unique(['book_id', 'user_id']);
         });
     }
 

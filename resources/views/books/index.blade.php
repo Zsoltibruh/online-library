@@ -2,9 +2,11 @@
 
 @section('content')
     <h1 class="text-2xl">Books</h1>
-    <button class="btn btn-primary" onclick="addBook.showModal()">Add new book</button>
-    <x-forms.search :route="route('books.index')" />
-
+    <div class="flex flex-col gap-2 content-around w-full">
+        <button class="btn btn-primary w-max" onclick="addBook.showModal()">Add new book</button>
+        <x-forms.search :route="route('books.index')" />
+    </div>
+    <div class="divider"></div>
     <x-display.table :headers="['Title', 'Actions']">
         @foreach ($books as $book)
             <tr class="hover:bg-base-300">
@@ -12,7 +14,7 @@
                 <td class="flex gap-2">
                     <button type="submit" class="btn btn-secondary"
                         onclick="reserveBook{{ $book->id }}.showModal()">Reserve</button>
-                    <button type="submit" class="btn btn-soft"
+                    <button type="submit" class="btn btn-primary"
                         onclick="showBook{{ $book->id }}.showModal()">View</button>
                     <button class="btn btn-info" onclick="editBook{{ $book->id }}.showModal()">Edit</button>
                     <form action="{{ route('books.destroy', $book) }}" method="post">
