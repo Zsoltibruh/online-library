@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->reservations()->whereHas('lostBooks')->exists();
     }
+
+    public function isLibrarian(): bool
+    {
+        return $this->role === UserRole::Librarian;
+    }
 }
