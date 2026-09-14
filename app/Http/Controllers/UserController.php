@@ -34,4 +34,23 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function show(User $user): View
+    {
+        $user = User::with([
+            'activeReservations',
+            'previousReservations',
+            'overdueReservations',
+        ])
+            ->withCount([
+                'activeReservations',
+                'previousReservations',
+                'overdueReservations',
+            ])
+            ->find($user->id);
+
+        return view('users.show', [
+            'user' => $user,
+        ]);
+    }
 }

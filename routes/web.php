@@ -26,6 +26,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/list-books', [BookController::class, 'list'])->name('books.list');
+    Route::get('/profile/{user}', [UserController::class, 'show'])->name('users.show');
 
     Route::middleware(AccessChecker::class)->group(function () {
         Route::resource('users', UserController::class)->only(['index', 'store', 'update', 'destroy']);

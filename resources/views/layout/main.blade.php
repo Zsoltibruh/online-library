@@ -43,7 +43,8 @@
                             <details class="z-50">
                                 <summary>Profile</summary>
                                 <ul class="bg-base-100 rounded-t-none p-2">
-                                    <li><a> {{ auth()->user()->name }} </a></li>
+                                    <li><a href="{{ route('users.show', auth()->user()) }}"> {{ auth()->user()->name }}
+                                        </a></li>
                                     <li>
                                         <form action="/logout" method="post">
                                             <button type="submit" class="link link-hover no-underline">Logout</button>
