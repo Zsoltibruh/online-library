@@ -16,7 +16,8 @@
                     <button type="submit" class="btn btn-primary"
                         onclick="showAuthor{{ $author->id }}.showModal()">View</button>
                     <button class="btn btn-info" onclick="editAuthor{{ $author->id }}.showModal()">Edit</button>
-                    <form action="{{ route('authors.destroy', $author) }}" method="POST">
+                    <form action="{{ route('authors.destroy', $author) }}" method="POST"
+                        onsubmit="return confirm('Are you sure you want to delete this author?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-error">Delete</button>

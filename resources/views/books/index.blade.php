@@ -17,7 +17,8 @@
                     <button type="submit" class="btn btn-primary"
                         onclick="showBook{{ $book->id }}.showModal()">View</button>
                     <button class="btn btn-info" onclick="editBook{{ $book->id }}.showModal()">Edit</button>
-                    <form action="{{ route('books.destroy', $book) }}" method="post">
+                    <form action="{{ route('books.destroy', $book) }}" method="post"
+                        onsubmit="return confirm('Are you sure you want to delete this book?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-error">Delete</button>
