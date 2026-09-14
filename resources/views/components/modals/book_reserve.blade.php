@@ -1,12 +1,13 @@
 <dialog id="reserveBook{{ $book->id }}" class="modal">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">Reserve {{ $book->title }}</h3>
+    <div class="modal-box w-11/12 max-w-2xl">
+        <h3 class="text-2xl font-bold">Reserve {{ $book->title }}</h3>
+        <div class="divider"></div>
         <form action="{{ route('reservations.store') }}" method="post">
             @csrf
             <input type="hidden" name="book_id" value="{{ $book->id }}">
-            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 text-base">
+            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4 text-base">
                 <label class="label" for="users">Members</label>
-                <select class="select h-auto" id="users" name="user_id" required>
+                <select class="select h-auto w-full" id="users" name="user_id" required>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}">
                             {{ $user->name }}
@@ -17,6 +18,7 @@
                 <button type="submit" class="btn btn-primary">Reserve book</button>
             </fieldset>
         </form>
+        <div class="divider"></div>
         <div class="modal-action">
             <form method="dialog">
                 <button class="btn">Close</button>
