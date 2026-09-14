@@ -49,7 +49,7 @@ class AuthController extends Controller
 
         User::create($credentials);
 
-        return redirect()->intended('/login');
+        return redirect()->route('show_login');
     }
 
     public function logout(Request $request): RedirectResponse
