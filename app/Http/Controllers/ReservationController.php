@@ -10,7 +10,6 @@ use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ReservationController extends Controller
@@ -26,7 +25,7 @@ class ReservationController extends Controller
             ->paginate(15);
 
         return view('reservations.index', [
-            'reservations' => $reservations
+            'reservations' => $reservations,
         ]);
     }
 
@@ -53,7 +52,7 @@ class ReservationController extends Controller
             ->paginate(15);
 
         return view('reservations.active', [
-            'reservations' => $reservations
+            'reservations' => $reservations,
         ]);
     }
 
@@ -67,7 +66,7 @@ class ReservationController extends Controller
             ->paginate(15);
 
         return view('reservations.overdue', [
-            'reservations' => $reservations
+            'reservations' => $reservations,
         ]);
     }
 

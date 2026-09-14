@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'credentials' => 'Invalid email or password'
+                'credentials' => 'Invalid email or password',
             ]);
         }
 

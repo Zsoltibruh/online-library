@@ -44,7 +44,6 @@ class BookController extends Controller
     {
         $search = $request->search;
 
-
         $books = Book::orderBy('title')
             ->with('authors:id,name')
             ->when($search, function ($query, $search) {
