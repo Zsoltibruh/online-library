@@ -22,6 +22,15 @@
                     @endforeach
                 </select>
 
+                <label class="label" for="categories">Categories</label>
+                <select class="select h-auto" id="categories" name="category_ids[]" multiple required>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <button type="submit" class="btn btn-primary">Add book</button>
             </fieldset>
         </form>

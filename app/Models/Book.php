@@ -26,4 +26,9 @@ class Book extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }

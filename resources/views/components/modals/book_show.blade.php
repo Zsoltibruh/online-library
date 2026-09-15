@@ -12,6 +12,12 @@
                 <li class="list-row">{{ $author->name }}</li>
             @endforeach
         </ul>
+        <p class="font-bold">Categories:</p>
+        <ul class="list">
+            @foreach ($book->categories as $category)
+                <li class="list-row">{{ $category->name }}</li>
+            @endforeach
+        </ul>
         <div class="divider"></div>
         <div class="modal-action">
             <form method="dialog">

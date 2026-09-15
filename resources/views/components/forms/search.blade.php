@@ -2,7 +2,6 @@
 
 <div class="mt-2">
     <form action="{{ $route }}" method="get">
-        @csrf
         <label class="input">
             <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
@@ -12,5 +11,9 @@
             </svg>
             <input type="search" class="grow" class="input" id="search" name="search" placeholder="Search" />
         </label>
+
+        {{ $slot }}
+
+        <button type="submit" class="btn btn-neutral">Search</button>
     </form>
 </div>

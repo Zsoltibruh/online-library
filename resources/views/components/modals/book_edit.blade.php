@@ -27,6 +27,15 @@
                     @endforeach
                 </select>
 
+                <label for="categories" class="label">Categories</label>
+                <select class="select h-auto w-full" id="categories" name="category_ids[]" multiple required>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @selected($book->categories->contains($category))>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <button type="submit" class="btn btn-primary">Edit book</button>
             </fieldset>
         </form>
