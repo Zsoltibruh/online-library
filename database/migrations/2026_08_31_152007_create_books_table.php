@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('publication_year');
             $table->integer('count');
 
+            $table->softDeletesTz();
+
             $table->fullText(['title', 'publication_year'])->language('english');
         });
     }

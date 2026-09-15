@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->date('birth');
 
+            $table->softDeletesTz();
+
             $table->fullText('name')->language('english');
         });
     }
